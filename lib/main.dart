@@ -30,17 +30,6 @@ class MyAppState extends ChangeNotifier {
     codes.add(code);
     notifyListeners();
   }
-
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -58,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = TimerPage();
         break;
       case 1:
-        page = FavoritesPage();
+        page = CodesPage();
         break;
       default:
         throw UnimplementedError('No widget for $selectedIndex');
@@ -73,12 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   extended: constraints.maxWidth >= 600,
                   destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      label: Text('Home'),
+                      icon: Icon(Icons.punch_clock),
+                      label: Text('Time Recording'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
+                      icon: Icon(Icons.add),
+                      label: Text('Add Charge Codes'),
                     ),
                   ],
                   selectedIndex: selectedIndex,
@@ -127,7 +116,8 @@ class TimerPage extends StatelessWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  appState.toggleFavorite();
+                  // Do action
+                  //appState.toggleFavorite();
                 },
                 icon: Icon(icon),
                 label: Text('Like'),
@@ -135,7 +125,8 @@ class TimerPage extends StatelessWidget {
               SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
-                  appState.getNext();
+                  // Do action
+                  //appState.getNext();
                 },
                 child: Text('Next'),
               ),
@@ -147,27 +138,24 @@ class TimerPage extends StatelessWidget {
   }
 }
 
-class FavoritesPage extends StatelessWidget {
+class CodesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var favorites = appState.favorites;
+    var codes = appState.codes;
 
-    if (favorites.isEmpty) {
-      return Center(child: Text('No favorites yet.'));
+    if (codes.isEmpty) {
+      return Center(child: Text('No charge codes yet.'));
     }
 
     return ListView(
       children: [
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Text('You have ${favorites.length} favoites:'),
+          child: Text('You have ${codes.length} codes:'),
         ),
-        for (var pair in favorites)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
-          ),
+        for (var code in codes)
+          ListTile(leading: Icon(Icons.favorite), title: Text(code)),
       ],
     );
   }
